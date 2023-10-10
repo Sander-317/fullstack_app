@@ -5,7 +5,7 @@ function App() {
   const [data, setData] = useState([{}]);
 
   useEffect(() => {
-    fetch("http://localhost:8000/test")
+    fetch("http://localhost:8000/test2")
       .then((res) => {
         return res.json();
       })
@@ -17,10 +17,10 @@ function App() {
 
   return (
     <div>
-      {typeof data.test === "undefined" ? (
+      {typeof data === "undefined" ? (
         <p>loading</p>
       ) : (
-        data.test.map((test, i) => <p key={i}>{test}</p>)
+        data.map((test, i) => <p key={i}>{test}</p>)
       )}
     </div>
   );
