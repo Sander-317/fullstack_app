@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import "./App.css";
+import TodoList from "./components/TodoList";
 
 function App() {
-  const [data, setData] = useState([{}]);
+  const [data, setData] = useState([[]]);
 
   useEffect(() => {
     fetch("http://localhost:8000/test2")
@@ -17,6 +18,9 @@ function App() {
 
   return (
     <div>
+      <TodoList />
+
+      <h1>fullstack web site</h1>
       {typeof data === "undefined" ? (
         <p>loading</p>
       ) : (

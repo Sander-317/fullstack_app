@@ -22,6 +22,20 @@ class User(Base):
         return f"({self.name})"
 
 
+class Todo(Base):
+    __tablename__ = "todos"
+
+    todo_id = Column(Integer, primary_key=True)
+    todo_text = Column(String)
+
+    def __init__(self, todo_id, todo_text):
+        self.todo_id = todo_id
+        self.todo_text = todo_text
+
+    def __repr__(self):
+        return f"({self.todo_text})"
+
+
 engine = create_engine("sqlite:///database.db", pool_pre_ping=True)
 Base.metadata.create_all(bind=engine)
 

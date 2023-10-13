@@ -21,13 +21,16 @@ def index():
     for user_obj in result.scalars():
         test.append(user_obj.name)
 
+    print(test)
+
+    # return ["test1", "test2", "test3"]
     return jsonify(test)
 
 
 @app.route("/test")
 def test():
     # return {"test"}
-    return {"test": ["test1", "test2", "test3"]}
+    return ["test1", "test2", "test3"]
 
 
 @app.route("/add/<username>")
@@ -52,6 +55,30 @@ def add_test():
     models.session.add(user5)
     models.session.commit()
     return "adding data"
+
+
+@app.route("/add/todo")
+def add_todo():
+    todo1 = models.Todo(1, "test todo 1")
+    todo2 = models.Todo(2, "test todo 2")
+    todo3 = models.Todo(3, "test todo 3")
+    models.session.add(todo1)
+    models.session.add(todo2)
+    models.session.add(todo3)
+    models.session.commit()
+    return "added todos"
+
+
+@app.route("/todos")
+def get_todos():
+    query = models.session.execute(select(models.Todo))
+
+    test = []
+    for user_obj in query.scalars():
+        # print(user_obj)
+        test.append(user_obj.todo_text)
+
+    return jsonify(test)
 
 
 if __name__ == "__main__":
