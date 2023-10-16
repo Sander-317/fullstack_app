@@ -1,6 +1,17 @@
-from sqlalchemy import create_engine, ForeignKey, Column, String, Integer, CHAR
+from sqlalchemy import (
+    create_engine,
+    ForeignKey,
+    Column,
+    String,
+    Integer,
+    CHAR,
+    BOOLEAN,
+    DateTime,
+)
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+
+import datetime
 from rich.traceback import install
 
 install()
@@ -27,10 +38,16 @@ class Todo(Base):
 
     todo_id = Column(Integer, primary_key=True)
     todo_text = Column(String)
+    todo_date = Column(DateTime, default=datetime.datetime.now)
 
-    def __init__(self, todo_id, todo_text):
-        self.todo_id = todo_id
+    def __init__(
+        self,
+        # todo_id,
+        todo_text,
+    ):
+        # self.todo_id = todo_id
         self.todo_text = todo_text
+        # self.date = todo_date
 
     def __repr__(self):
         return f"({self.todo_text})"
