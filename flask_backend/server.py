@@ -60,18 +60,6 @@ def add_test():
     return "adding data"
 
 
-# @app.route("/add/todo")
-# def add_todo():
-#     todo1 = models.Todo(1, "test todo 1")
-#     todo2 = models.Todo(2, "test todo 2")
-#     todo3 = models.Todo(3, "test todo 3")
-#     models.session.add(todo1)
-#     models.session.add(todo2)
-#     models.session.add(todo3)
-#     models.session.commit()
-#     return "added todos"
-
-
 class TodoSchema(ma.Schema):
     class Meta:
         fields = ("todo_id", "todo_text", "todo_date")
@@ -88,7 +76,13 @@ def get_todos():
     test = []
     for user_obj in query.scalars():
         # print(user_obj)
-        test.append(user_obj.todo_text)
+        test.append(
+            {
+                "todo_id": user_obj.todo_id,
+                "todo_text": user_obj.todo_text,
+                "todo_date": user_obj.todo_date,
+            }
+        )
 
     return jsonify(test)
 
@@ -103,25 +97,41 @@ def add_todo():
     return todo_schema.jsonify(todo)
 
 
-# @app.route("/delete/users")
-# def delete_users():
-#     query = models.session.execute(select(models.User))
+@app.route("/delete/todo/<id>", methods=["GET"])
+def delete_todo(id):
+    query = models.session.get(models.Todo, id)
 
-#     for user_obj in query.scalars():
-#         models.session.delete(user_obj)
+    result = []
+    result.append(query.todo_text)
+    models.session.delete(query)
+    models.session.commit()
+    # for user_obj in query.scalars():
+    #     result.append(user_obj.todo_text)
 
-#     return jsonify("users deleted")
+    print("RESULT", query)
+
+    return jsonify("deleted")
 
 
-# @app.route("/users")
-# def get_users():
-#     query = models.session.execute(select(models.User))
+@app.route("/delete/users")
+def delete_users():
+    query = models.session.execute(select(models.User))
 
-#     users = []
-#     for user_obj in query.scalars():
-#         users.append(user_obj.name)
+    for user_obj in query.scalars():
+        models.session.delete(user_obj)
 
-#     return jsonify(users)
+    return jsonify("users deleted")
+
+
+@app.route("/users")
+def get_users():
+    query = models.session.execute(select(models.User))
+
+    users = []
+    for user_obj in query.scalars():
+        users.append(user_obj.name)
+
+    return jsonify(users)
 
 
 if __name__ == "__main__":
