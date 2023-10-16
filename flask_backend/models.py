@@ -42,12 +42,9 @@ class Todo(Base):
 
     def __init__(
         self,
-        # todo_id,
         todo_text,
     ):
-        # self.todo_id = todo_id
         self.todo_text = todo_text
-        # self.date = todo_date
 
     def __repr__(self):
         return f"({self.todo_text})"

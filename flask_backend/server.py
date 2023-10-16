@@ -66,25 +66,17 @@ class TodoSchema(ma.Schema):
 
 
 todo_schema = TodoSchema()
-todos_schema = TodoSchema(many=True)
 
 
 @app.route("/get/todos", methods=["GET"])
 def get_todos():
-    query = models.session.execute(select(models.Todo))
+    all_todos = models.session.execute(select(models.Todo))
 
-    test = []
-    for user_obj in query.scalars():
-        # print(user_obj)
-        test.append(
-            {
-                "todo_id": user_obj.todo_id,
-                "todo_text": user_obj.todo_text,
-                "todo_date": user_obj.todo_date,
-            }
-        )
+    result = []
+    for user_obj in all_todos.scalars():
+        result.append(todo_schema.dump(user_obj))
 
-    return jsonify(test)
+    return jsonify(result)
 
 
 @app.route("/add/todo", methods=["POST"])
@@ -105,10 +97,6 @@ def delete_todo(id):
     result.append(query.todo_text)
     models.session.delete(query)
     models.session.commit()
-    # for user_obj in query.scalars():
-    #     result.append(user_obj.todo_text)
-
-    print("RESULT", query)
 
     return jsonify("deleted")
 
