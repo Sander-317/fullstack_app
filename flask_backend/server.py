@@ -101,6 +101,23 @@ def delete_todo(id):
     return jsonify("deleted")
 
 
+@app.route("/update/todo/<id>", methods=["post"])
+def update_todo(id):
+    query = models.session.get(models.Todo, id)
+    new_todo_text = request.json["todo_text"]
+    query.todo_text = new_todo_text
+    models.session.add(query)
+    models.session.commit()
+
+    # result = []
+    # result.append(todo_schema.dump(query))
+    # result[0]["todo_text"] = new_todo_text
+
+    print("query", query.todo_text)
+    # print("RESULT", result)
+    return todo_schema.jsonify(query)
+
+
 @app.route("/delete/users")
 def delete_users():
     query = models.session.execute(select(models.User))
